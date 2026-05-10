@@ -1,0 +1,2 @@
+torchrun --nproc_per_node=8 --nnodes=1 --node_rank=0 --master_port=12355 \
+  process_depth.py

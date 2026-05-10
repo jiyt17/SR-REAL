@@ -1,0 +1,100 @@
+---
+spar-lor-cot:
+    _target_: llava.data.LLaVADataset
+    data_path: path/to/data/SPAR-7M-RGBD/spar_cot_coldstart_lor.json
+    media_dir: path/to/data/SPAR-7M-RGBD/spar/scannet/images
+    depth_dir: path/to/data/SPAR-7M-RGBD/scannet_svila/depth
+
+spar-dtr-cot:
+    _target_: llava.data.LLaVADataset
+    data_path: path/to/data/SPAR-7M-RGBD/spar_cot_coldstart_ground_dtr.json
+    media_dir: path/to/data/SPAR-7M-RGBD/spar/scannet/images
+    depth_dir: path/to/data/SPAR-7M-RGBD/scannet_svila/depth
+
+CA-cot-select:
+    _target_: llava.data.LLaVADataset
+    data_path: path/to/data/CA_gemini_cot/CA_cot_coldstart_select.json
+    media_dir: path/to/SpatialAgent/data/CA-1M-EXT/train/
+    depth_dir: path/to/data/CA_gemini_cot/depth
+
+NS-cot-select:
+    _target_: llava.data.LLaVADataset
+    data_path: path/to/data/CA_gemini_cot/NS_cot_coldstart_select.json
+    media_dir: path/to/SpatialAgent/omni3d/datasets/nuScenes
+    depth_dir: path/to/data/CA_gemini_cot/NuScene_depth 
+
+llava_1_5_mm_align:
+    _target_: llava.data.LLaVADataset
+    data_num: 100000
+    data_path: path/to/dataset/vila-pretrain/LLaVA-CC3M-Pretrain-595K/chat.json
+    media_dir: path/to/dataset/vila-pretrain/LLaVA-CC3M-Pretrain-595K/images
+    depth_dir: path/to/datasets/Aero_v0/v0/llava_1_5_mm_align/depth
+
+refcoco-train-float:
+    _target_: llava.data.LLaVADataset
+    data_num: 200000
+    data_path: path/to/SpatialAgent/data/RVILA-Data/refcoco/refcoco_train_float.json
+    media_dir: path/to/project/SpatialAgents/data/RVILA-data/2D-grounding/refcoco
+    depth_dir: path/to/SpatialAgent/data/RefCOCO-Depth
+
+SL-global-ground2d:
+    _target_: llava.data.LLaVADataset
+    data_path: path/to/data/SpatialLadder/SL_ground_question.json
+    media_dir: path/to/data/SpatialLadder/images
+    depth_dir: path/to/data/SpatialLadder/depth
+
+srgpt-ground2d:
+    _target_: llava.data.LLaVADataset
+    data_path: path/to/srgpt_mc_pipe/srgpt_datapipe/srgpt-mc-det-region-r1-valid-2dground.json
+    media_dir: path/to/datasets/Openimages/train
+    depth_dir: path/to/datasets/Aero_v0/v0/spatialrgpt_ft/depth
+
+spar-multiobj-ground-center:
+    _target_: llava.data.LLaVADataset
+    data_path: path/to/data/SPAR-7M-RGBD/scannet_singleimg_select_3D/spar-scannet-singleimg-select-ground-multiobj-region.json
+    media_dir: path/to/data/SPAR-7M-RGBD/spar/scannet/images
+    depth_dir: path/to/data/SPAR-7M-RGBD/scannet_svila/depth
+
+ca1m-ground-base-v1:
+    _target_: llava.data.LLaVADataset
+    data_path: path/to/SpatialAgent/data/RVILA-Data/CA-1M/train_v1_parsed_base.json
+    media_dir: path/to/SpatialAgent/data/CA-1M-EXT/train
+    depth_dir: path/to/SpatialAgent/data/CA-1M-EXT-Depth/train
+
+ca1m-ground-base-v1-center:
+    _target_: llava.data.LLaVADataset
+    data_path: path/to/data/ground_center/CA-1M-ground-center.json
+    media_dir: path/to/SpatialAgent/data/CA-1M-EXT/train
+    depth_dir: path/to/SpatialAgent/data/CA-1M-EXT-Depth/train
+
+omni3d-region-base-v1:
+    _target_: llava.data.LLaVADataset
+    data_path: path/to/data/ground_center/omni3d-region-ground-bbox.json
+    media_dir: path/to/SpatialAgent/omni3d/datasets
+    depth_dir: path/to/SpatialAgent/omni3d/datasets/depth
+
+omni3d-region-base-v1-center:
+    _target_: llava.data.LLaVADataset
+    data_path: path/to/data/ground_center/omni3d-region-ground-center.json
+    media_dir: path/to/SpatialAgent/omni3d/datasets
+    depth_dir: path/to/SpatialAgent/omni3d/datasets/depth
+
+omninocs-region-base-v1:
+    _target_: llava.data.LLaVADataset
+    data_path: path/to/SpatialAgent/data/RVILA-Data/OmniNOCS/train_region_v1_base.json
+    media_dir: path/to/SpatialAgent/data/OmniNOCS
+    depth_dir: path/to/SpatialAgent/data/OmniNOCS-Depth
+
+regiongpt-ft:
+    _target_: llava.data.LLaVADataset
+    data_num: 100000
+    data_path: path/to/SpatialAgent/data/SVILA-2D-Data/svila_regiongpt_ft.json
+    media_dir: path/to/project/SpatialAgents/data/RVILA-data/region-captioning/RegionGPT/images
+    depth_dir: path/to/datasets/Aero_v0/v0/regiongpt_ft/depth
+
+spatialrgpt_ft:
+    _target_: llava.data.LLaVADataset
+    data_num: 100000
+    data_path: path/to/SpatialAgent/data/SVILA-2D-Data/svila_srgpt_multi.json
+    media_dir: path/to/datasets/Openimages/train
+    depth_dir: path/to/datasets/Aero_v0/v0/spatialrgpt_ft/depth
