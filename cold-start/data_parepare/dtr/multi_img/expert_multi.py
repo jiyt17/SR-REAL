@@ -120,7 +120,7 @@ client = genai.Client(
     api_key="xxxxx",
 )
 
-model = "gemini-2.5-pro-preview-03-25"
+model = "expert_model_api"
 
 spar = json.load(open('/path/to/spar-scannet-multiimg-select-3d-cot-source.json', 'r'))
 print(f"Total samples: {len(spar)}")

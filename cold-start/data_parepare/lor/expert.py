@@ -6,13 +6,12 @@
 # distribution of this software and related documentation without an express
 # license agreement from NVIDIA CORPORATION is strictly prohibited.
 
-from sys_prompt import SPAR_multiview_cot_generate_prompt
+from sys_prompt import SPAR_cot_generate_prompt
 
 import os
 from google import genai
 from google.genai import types
 from tqdm import tqdm
-import time
 import json
 
 from PIL import Image, ImageDraw
@@ -117,59 +116,39 @@ def draw_visual_prompt(line, img):
 
 
 client = genai.Client(
-    api_key="xxxxxxx",
+    api_key="xxxxxxxxxx",
 )
 
-model = "gemini-2.5-pro-preview-03-25"
+model = "expert_model_api"
 
-spar = json.load(open('data/SPAR-7M-RGBD/gemini-cot/spar-multiimg-select-cold.json', 'r'))
+spar = json.load(open('data/SPAR-7M-RGBD/gemini-cot/spar-select-cold.json', 'r'))
+spar = spar[:5000]
 
 res = []
 for line in spar:
-    img_list = []
-    for img in line["image"]:
-        image_path = image_root + img
-        img = Image.open(image_path)
-        img_list.append(img)
-    if 'point_img_idx' in line:
-        points = []
-        for k,v in line.items():
-            if '_point' in k:
-                points.append({k: v})
-        print(points)
-        for point_id, img_id in enumerate(line['point_img_idx'][0]):
-            img_list[img_id] = draw_visual_prompt(points[point_id], img_list[img_id])
-    if 'bbox_img_idx' in line:
-        bboxes = []
-        for k,v in line.items():
-            if '_bbox' in k:
-                bboxes.append({k: v})
-        print(bboxes)
-        for bbox_id, img_id in enumerate(line['bbox_img_idx'][0]):
-            img_list[img_id] = draw_visual_prompt(bboxes[bbox_id], img_list[img_id])
+    image_path = image_root + line["image"][0]
+    img = Image.open(image_path)
+    img = draw_visual_prompt(line, img)
 
     ques = line['conversations'][0]['value']
     ans = line['conversations'][1]['value']
 
-    binary_img_list = []
-    for img in img_list:
-        byte_stream = BytesIO()          # 创建内存二进制流
-        img.save(byte_stream, format='JPEG')  # 将图片以PNG格式存入流（格式需匹配原文件）
-        binary_img = byte_stream.getvalue() 
-        binary_img = types.Part.from_bytes(data=binary_img, mime_type="image/png")
-        binary_img_list.append(binary_img)
+    byte_stream = BytesIO()          # 创建内存二进制流
+    img.save(byte_stream, format='JPEG')  # 将图片以PNG格式存入流（格式需匹配原文件）
+    binary_img = byte_stream.getvalue() 
 
     contents = [
         types.Content(
             role="user",
-            parts=binary_img_list + [
+            parts=[
+                types.Part.from_bytes(data=binary_img, mime_type="image/png"),
                 types.Part.from_text(text=f"""Question: {ques}"""),
                 types.Part.from_text(text=f"""Answer: {ans}"""),
             ],
         ),
     ]
     generate_content_config = types.GenerateContentConfig(
-        system_instruction=SPAR_multiview_cot_generate_prompt,
+        system_instruction=SPAR_cot_generate_prompt,
         response_mime_type="text/plain", # "application/json", "text/plain"
     )
     while True:
@@ -187,9 +166,9 @@ for line in spar:
             time.sleep(10)
             continue
 
-    print(SG)
+    # print(SG)
     line['cot'] = SG
     res.append(line)
 
-    with open('spar_multiview_select_cold_cot.json', 'w') as f:
+    with open('spar_select_cold_cot.json', 'w') as f:
         json.dump(res, f, indent=4)

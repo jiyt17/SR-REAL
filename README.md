@@ -29,12 +29,12 @@ We use [SPAR](https://github.com/LogosRoboticsGroup/SPAR) as the data source for
 cd SR-REAL/cold-start/data_parepare
 ```
 
-For LOR CoT construction, first run `gemini.py` to generate chain-of-thought rationales, and then run `process.py` to convert them into instruction-tuning data.
+For LOR CoT construction, first run `expert.py` to generate chain-of-thought rationales, and then run `process.py` to convert them into instruction-tuning data.
 
 For DTR CoT construction, follow these steps:
 
 - Run `deal.py` to match annotated objects from SPAR with EmbodiedScan and obtain their 3D coordinates.
-- Run `gemini.py` to generate reasoning chains conditioned on the image, question, and object coordinates.
+- Run `expert.py` to generate reasoning chains conditioned on the image, question, and object coordinates.
 - Run `qwen3.py` to extract object names from SPAR.
 - Run `process.py` to combine the CoT rationales, object names, and coordinate information into DTR question-answer instruction-tuning data.
 - Run `process_region.py` to produce the final instruction-tuning data with region prompts.

@@ -6,17 +6,17 @@
 # distribution of this software and related documentation without an express
 # license agreement from NVIDIA CORPORATION is strictly prohibited.
 
-from sys_prompt import SPAR_3dcot_generate_prompt
+from sys_prompt import SPAR_multiview_cot_generate_prompt
 
 import os
 from google import genai
 from google.genai import types
 from tqdm import tqdm
+import time
 import json
 
 from PIL import Image, ImageDraw
 from io import BytesIO
-import time
 
 dot_radius = 20
 image_root = "data/SPAR-7M-RGBD/spar/scannet/images/"
@@ -117,51 +117,59 @@ def draw_visual_prompt(line, img):
 
 
 client = genai.Client(
-    api_key="xxxxxxxxxxxx",
+    api_key="xxxxxxx",
 )
 
-model = "gemini-2.5-pro-preview-03-25"
+model = "expert_model_api"
 
-spar = json.load(open('data/SPAR-3D/spar-scannet-singleimg-select-cold-3d.json', 'r'))
-print(f"Total samples: {len(spar)}")
+spar = json.load(open('data/SPAR-7M-RGBD/gemini-cot/spar-multiimg-select-cold.json', 'r'))
 
 res = []
-if os.path.exists('spar-scannet-singleimg-select-cold-3d-cot.json'):
-    res = json.load(open('spar-scannet-singleimg-select-cold-3d-cot.json', 'r'))
-    print(f"Loaded {len(res)} samples from existing file.")
-    spar = spar[len(res):]
-    print(f"Remaining samples to process: {len(spar)}")
-    
-for line in tqdm(spar):
-    image_path = image_root + line["image"][0]
-    img = Image.open(image_path)
-    img = draw_visual_prompt(line, img)
+for line in spar:
+    img_list = []
+    for img in line["image"]:
+        image_path = image_root + img
+        img = Image.open(image_path)
+        img_list.append(img)
+    if 'point_img_idx' in line:
+        points = []
+        for k,v in line.items():
+            if '_point' in k:
+                points.append({k: v})
+        print(points)
+        for point_id, img_id in enumerate(line['point_img_idx'][0]):
+            img_list[img_id] = draw_visual_prompt(points[point_id], img_list[img_id])
+    if 'bbox_img_idx' in line:
+        bboxes = []
+        for k,v in line.items():
+            if '_bbox' in k:
+                bboxes.append({k: v})
+        print(bboxes)
+        for bbox_id, img_id in enumerate(line['bbox_img_idx'][0]):
+            img_list[img_id] = draw_visual_prompt(bboxes[bbox_id], img_list[img_id])
 
     ques = line['conversations'][0]['value']
     ans = line['conversations'][1]['value']
-    pos_3d = line['3d_pos']
-    visual_prompt_3d = {}
-    for k,v in pos_3d.items():
-        visual_prompt_3d[k] = [round(x, 2) for x in v['center_cam']]
-    # print(visual_prompt_3d)
 
-    byte_stream = BytesIO()          # 创建内存二进制流
-    img.save(byte_stream, format='JPEG')  # 将图片以PNG格式存入流（格式需匹配原文件）
-    binary_img = byte_stream.getvalue() 
+    binary_img_list = []
+    for img in img_list:
+        byte_stream = BytesIO()          # 创建内存二进制流
+        img.save(byte_stream, format='JPEG')  # 将图片以PNG格式存入流（格式需匹配原文件）
+        binary_img = byte_stream.getvalue() 
+        binary_img = types.Part.from_bytes(data=binary_img, mime_type="image/png")
+        binary_img_list.append(binary_img)
 
     contents = [
         types.Content(
             role="user",
-            parts=[
-                types.Part.from_bytes(data=binary_img, mime_type="image/png"),
+            parts=binary_img_list + [
                 types.Part.from_text(text=f"""Question: {ques}"""),
                 types.Part.from_text(text=f"""Answer: {ans}"""),
-                types.Part.from_text(text=f"""Scene Graph: {visual_prompt_3d}"""),
             ],
         ),
     ]
     generate_content_config = types.GenerateContentConfig(
-        system_instruction=SPAR_3dcot_generate_prompt,
+        system_instruction=SPAR_multiview_cot_generate_prompt,
         response_mime_type="text/plain", # "application/json", "text/plain"
     )
     while True:
@@ -179,8 +187,9 @@ for line in tqdm(spar):
             time.sleep(10)
             continue
 
+    print(SG)
     line['cot'] = SG
     res.append(line)
 
-    with open('spar-scannet-singleimg-select-cold-3d-cot.json', 'w') as f:
+    with open('spar_multiview_select_cold_cot.json', 'w') as f:
         json.dump(res, f, indent=4)
