@@ -1,7 +1,7 @@
 # SR-REAL
 
 [![arXiv](https://img.shields.io/badge/Paper-arXiv-red.svg)]()
-[![deploy](https://img.shields.io/badge/Hugging%20Face-SR_REAL-FFEB3B)]()
+[![deploy](https://img.shields.io/badge/Hugging%20Face-SR_REAL-FFEB3B)](https://huggingface.co/jiyatai/SR-REAL-RL)
 
 
 ## Introduction
@@ -39,11 +39,11 @@ For DTR CoT construction, follow these steps:
 - Run `process.py` to combine the CoT rationales, object names, and coordinate information into DTR question-answer instruction-tuning data.
 - Run `process_region.py` to produce the final instruction-tuning data with region prompts.
 
-You can also directly download our generated cold-start CoT data from [Hugging Face]().
+You can also directly download our generated cold-start CoT data from [Hugging Face](https://huggingface.co/datasets/jiyatai/spar-cot).
 
 During cold-start training, we additionally mix CoT data with 2D/3D grounding data, spatial region QA data, and general multimodal instruction-tuning data. Please configure the corresponding data paths in `SR-REAL/cold-start/llava/data/registry/datasets/cs-oci-ord.yaml` before training.
 
-The spatial region data is derived from [SpatialRGPT](https://github.com/AnjieCheng/SpatialRGPT). The 3D grounding data is derived from [Omni3D](https://github.com/facebookresearch/omni3d), [CA1M](https://github.com/apple/ml-cubifyanything), [OmniNOCS](https://github.com/google-deepmind/omninocs), and other sources. Our processed region-to-3D data is available on [Hugging Face]().
+The spatial region data is derived from [SpatialRGPT](https://github.com/AnjieCheng/SpatialRGPT). The 3D grounding data is derived from [Omni3D](https://github.com/facebookresearch/omni3d), [CA1M](https://github.com/apple/ml-cubifyanything), [OmniNOCS](https://github.com/google-deepmind/omninocs), and other sources. Our processed region-to-3D data is available on [Hugging Face](https://huggingface.co/datasets/jiyatai/2D-to-3D-grounding).
 
 3. SFT Training
 
@@ -76,7 +76,7 @@ python scripts/transform.py
 
 Our RL training data mainly comes from SPAR and SpatialRGPT, covering spatial multiple-choice and fill-in-the-blank questions.
 
-The RL data follows the same format as instruction-tuning data, but the answer field contains only the final correct answer. For DTR-style RL data, we additionally provide 3D coordinate annotations and region prompts. The data processing pipeline is similar to the CoT construction process described above. The processed data is available on [Hugging Face]().
+The RL data follows the same format as instruction-tuning data, but the answer field contains only the final correct answer. For DTR-style RL data, we additionally provide 3D coordinate annotations and region prompts. The data processing pipeline is similar to the CoT construction process described above. The processed data is available on [Hugging Face](https://huggingface.co/datasets/jiyatai/SR-REAL-rldata).
 
 ```bash
 bash run_r1_region.sh
