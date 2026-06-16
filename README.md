@@ -1,7 +1,7 @@
 # SR-REAL
 
 [![arXiv](https://img.shields.io/badge/Paper-arXiv-red.svg)]()
-[![deploy](https://img.shields.io/badge/Hugging%20Face-SR_REAL-FFEB3B)](https://huggingface.co/jiyatai/SR-REAL-RL)
+[![deploy](https://img.shields.io/badge/Hugging%20Face-SR_REAL-FFEB3B)](https://huggingface.co/collections/jiyatai/sr-real)
 
 
 ## Introduction
@@ -39,7 +39,7 @@ For DTR CoT construction, follow these steps:
 - Run `process.py` to combine the CoT rationales, object names, and coordinate information into DTR question-answer instruction-tuning data.
 - Run `process_region.py` to produce the final instruction-tuning data with region prompts.
 
-You can also directly download our generated cold-start CoT data from [Hugging Face](https://huggingface.co/datasets/jiyatai/spar-cot).
+You can also directly download our generated cold-start CoT data from [SPAR-cot](https://huggingface.co/datasets/jiyatai/spar-cot) and [CA-NS-cot](https://huggingface.co/datasets/jiyatai/ca-ns-cot).
 
 During cold-start training, we additionally mix CoT data with 2D/3D grounding data, spatial region QA data, and general multimodal instruction-tuning data. Please configure the corresponding data paths in `SR-REAL/cold-start/llava/data/registry/datasets/cs-oci-ord.yaml` before training.
 
@@ -90,7 +90,7 @@ Merge model weights:
 python scripts/model_merger.py --local_dir rl_model_actor_path
 ```
 
-For benchmark preparation, please refer to [EVAL.md](cold-start/eval/EVAL.md). Then run:
+The RL model can be downloaded on [Hugging Face](https://huggingface.co/jiyatai/SR-REAL-RL). For benchmark preparation, please refer to [EVAL.md](cold-start/eval/EVAL.md). Then run:
 
 ```bash
 cd cold-start/eval
