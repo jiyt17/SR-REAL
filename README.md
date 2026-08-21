@@ -99,6 +99,31 @@ bash eval.sh
 
 ## Citation
 
+```bibtex
+@article{DBLP:journals/corr/abs-2606-17539,
+  author       = {Yatai Ji and
+                  An{-}Chieh Cheng and
+                  Yang Fu and
+                  Yukang Chen and
+                  Han Zhang and
+                  Zhaojing Yang and
+                  Wei Huang and
+                  Ka Chun Cheung and
+                  Song Han and
+                  Vidya Nariyambut Murali and
+                  Pavlo Molchanov and
+                  Jan Kautz and
+                  Simon See and
+                  Hongxu Yin and
+                  Ping Luo and
+                  Sifei Liu},
+  title        = {Reinforcing Dual-Path Reasoning in Spatial Vision Language Models},
+  journal      = {CoRR},
+  volume       = {abs/2606.17539},
+  year         = {2026}
+}
+```
+
 ## Acknowledgement
 
 This project builds on code from several repositories, especially [SR-3D](https://github.com/AnjieCheng/SR-3D), [Long-RL](https://github.com/NVlabs/Long-RL), and [veRL](https://github.com/verl-project/verl). We sincerely thank the authors for their excellent work.
