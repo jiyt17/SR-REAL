@@ -1,6 +1,6 @@
 # SR-REAL
 
-[![arXiv](https://img.shields.io/badge/Paper-arXiv-red.svg)]()
+[![arXiv](https://img.shields.io/badge/Paper-arXiv-red.svg)](https://arxiv.org/pdf/2606.17539)
 [![deploy](https://img.shields.io/badge/Hugging%20Face-SR_REAL-FFEB3B)](https://huggingface.co/collections/jiyatai/sr-real)
 
 
