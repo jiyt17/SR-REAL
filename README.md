@@ -6,7 +6,7 @@
 
 ## Introduction
 
-This repository contains the official implementation of "Reinforcing Dual-Path Reasoning in Spatial Vision Language Models".
+This repository contains the official implementation of "Reinforcing Dual-Path Reasoning in Spatial Vision Language Models" (**EMNLP2026 Main**).
 
 We present a unified framework that equips a spatial VLM with two complementary reasoning paths: Language-Only Reasoning (LOR), which performs step-by-step linguistic deduction, and Detect-Then-Reason (DTR), which detects 3D geometric cues (e.g., centers or bounding boxes) via region tokens before explicit geometric inference.
 
